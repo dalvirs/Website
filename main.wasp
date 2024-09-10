@@ -1,0 +1,64 @@
+app Inventory_counter {
+  wasp: {
+    version: "^0.14.2"
+  },
+  title: "Inventory_counter",
+  client: {
+    rootComponent: import { Layout } from "@src/Layout.jsx"
+  },
+  auth: {
+    userEntity: User,
+    methods: {
+      usernameAndPassword: {}
+    },
+    onAuthFailedRedirectTo: "/login",
+    onAuthSucceededRedirectTo: "/"
+  }
+}
+
+route LoginRoute { path: "/login", to: LoginPage }
+page LoginPage {
+  component: import Login from "@src/pages/auth/Login.jsx"
+}
+
+route SignupRoute { path: "/signup", to: SignupPage }
+page SignupPage {
+  component: import Signup from "@src/pages/auth/Signup.jsx"
+}
+
+action createInventory {
+  fn: import { createInventory } from "@src/actions.js",
+  entities: [Inventory]
+}
+
+action addItem {
+  fn: import { addItem } from "@src/actions.js",
+  entities: [Item, Inventory]
+}
+
+action updateItemQuantity {
+  fn: import { updateItemQuantity } from "@src/actions.js",
+  entities: [Item]
+}
+
+query getInventories {
+  fn: import { getInventories } from "@src/queries.js",
+  entities: [Inventory]
+}
+
+query getItems {
+  fn: import { getItems } from "@src/queries.js",
+  entities: [Item, Inventory]
+}
+
+route DashboardRoute { path: "/", to: DashboardPage }
+page DashboardPage {
+  component: import DashboardPage from "@src/pages/Dashboard.jsx",
+  authRequired: true
+}
+
+route InventoryRoute { path: "/inventory/:inventoryId", to: InventoryPage }
+page InventoryPage {
+  component: import InventoryPage from "@src/pages/Inventory.jsx",
+  authRequired: true
+}
